@@ -21148,21 +21148,21 @@ var RecipeEditor = Views.RecipeEditor = React.createClass({displayName: 'RecipeE
         React.DOM.fieldset(null, 
           React.DOM.legend(null, "General"), 
           React.DOM.ol(null, 
-            React.DOM.li(null, React.DOM.label(null, "Name:", React.DOM.span({className: "flex"}, React.DOM.input({type: "text"})))), 
-            React.DOM.li(null, React.DOM.label(null, "Description:", React.DOM.span({className: "flex"}, React.DOM.textarea(null))))
+            React.DOM.li(null, React.DOM.label({className: "required"}, "Name:", React.DOM.span({className: "ast"}, "*"), React.DOM.span({className: "flex"}, React.DOM.input({type: "text"})))), 
+            React.DOM.li(null, React.DOM.label({className: "required"}, "Description:", React.DOM.span({className: "ast"}, "*"), React.DOM.span({className: "flex"}, React.DOM.textarea(null))))
           )
         ), 
         React.DOM.fieldset(null, 
           React.DOM.legend(null, "Ingredients"), 
           React.DOM.ol(null, 
-            React.DOM.li({className: "flexButton"}, React.DOM.input({type: "text"}), React.DOM.button(null, "-")), 
+            React.DOM.li({className: "flexButton"}, React.DOM.input({type: "text", placeholder: "1 Egg Seperated"}), React.DOM.button(null, "-")), 
             React.DOM.li(null, React.DOM.button(null, "+ Add Ingredient"))
           )
         ), 
         React.DOM.fieldset(null, 
           React.DOM.legend(null, "Directions"), 
           React.DOM.ol(null, 
-            React.DOM.li({className: "flexButton"}, React.DOM.input({type: "text"}), React.DOM.button(null, "-")), 
+            React.DOM.li({className: "flexButton"}, React.DOM.input({type: "text", placeholder: "Preheat oven to 350"}), React.DOM.button(null, "-")), 
             React.DOM.li(null, React.DOM.button(null, "+ Add Step"))
           )
         ), 

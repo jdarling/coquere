@@ -97,21 +97,21 @@ var RecipeEditor = Views.RecipeEditor = React.createClass({
         <fieldset>
           <legend>General</legend>
           <ol>
-            <li><label>Name:<span className="flex"><input type="text" /></span></label></li>
-            <li><label>Description:<span className="flex"><textarea /></span></label></li>
+            <li><label className="required">Name:<span className="ast">*</span><span className="flex"><input type="text" /></span></label></li>
+            <li><label className="required">Description:<span className="ast">*</span><span className="flex"><textarea /></span></label></li>
           </ol>
         </fieldset>
         <fieldset>
           <legend>Ingredients</legend>
           <ol>
-            <li className="flexButton"><input type="text" /><button>-</button></li>
+            <li className="flexButton"><input type="text" placeholder="1 Egg Seperated" /><button>-</button></li>
             <li><button>+ Add Ingredient</button></li>
           </ol>
         </fieldset>
         <fieldset>
           <legend>Directions</legend>
           <ol>
-            <li className="flexButton"><input type="text" /><button>-</button></li>
+            <li className="flexButton"><input type="text" placeholder="Preheat oven to 350" /><button>-</button></li>
             <li><button>+ Add Step</button></li>
           </ol>
         </fieldset>

@@ -161,6 +161,10 @@ body {
 .site-title a:active {
   text-decoration: none;
 }
+.required .ast {
+  color: #ff0000;
+  font-weight: bold;
+}
 button,
 .button {
   padding: 0px 5px;

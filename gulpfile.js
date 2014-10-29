@@ -13,6 +13,15 @@ var browserify = require('browserify'),
     inject = require('gulp-inject')
     ;
 
+var watching = false;
+var handleError = function(err){
+  console.error(err.toString());
+  if(watching){
+    return this.emit('end');
+  }
+  return process.exit(1);
+}
+
 gulp.task('clean', function(cb) {
   del([
       'web/site/**'
@@ -21,12 +30,12 @@ gulp.task('clean', function(cb) {
 
 gulp.task('styles', function() {
   return gulp.src('web/src/style/main.less')
-    .pipe(less())
-    .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-    .pipe(rename({basename: 'style'}))
+    .pipe(less().on('error', handleError))
+    .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4').on('error', handleError))
+    .pipe(rename({basename: 'style'}).on('error', handleError))
     .pipe(gulp.dest('web/site/style'))
-    .pipe(rename({suffix: '.min'}))
-    .pipe(minifycss())
+    .pipe(rename({suffix: '.min'}).on('error', handleError))
+    .pipe(minifycss().on('error', handleError))
     .pipe(gulp.dest('web/site/style'))
     ;
 });
@@ -36,6 +45,7 @@ gulp.task('scripts', function(){
   b.transform(reactify); // use the reactify transform
   b.add('./web/src/js/app.js');
   return b.bundle()
+    .on('error', handleError)
     .pipe(source('app.js'))
     .pipe(gulp.dest('web/site/js'));
 });
@@ -48,8 +58,8 @@ gulp.task('html', function(){
       // return file contents as string
       return file.contents.toString('utf8');
     }
-  }))
-  .pipe(replace(/<!--.+?-->/gm, ''))
+  }).on('error', handleError))
+  .pipe(replace(/<!--.+?-->/gm, '').on('error', handleError))
   .pipe(gulp.dest('web/site'))
   ;
 });
@@ -60,12 +70,13 @@ gulp.task('images', function() {
       progressive: true,
       interlaced: true,
       svgoPlugins: [{removeViewBox: false}]
-    }))
+    }).on('error', handleError))
     .pipe(gulp.dest('web/site/images'))
     ;
 });
 
 gulp.task('watch', ['clean'], function() {
+  watching = true;
   // Watch .less files
   gulp.watch('web/src/style/**/*.less', ['styles']);
   // Watch .css files
