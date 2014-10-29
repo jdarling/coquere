@@ -1,0 +1,298 @@
+@import url(http://fonts.googleapis.com/css?family=Great+Vibes);
+a,
+a:visited {
+  color: #382b35;
+  text-decoration: none;
+}
+a:hover,
+a:active {
+  text-decoration: underline;
+}
+/*!
+ * "Fork me on GitHub" CSS ribbon v0.1.1 | MIT License
+ * https://github.com/simonwhitaker/github-fork-ribbon-css
+*/
+
+/* Left will inherit from right (so we don't need to duplicate code) */
+.github-fork-ribbon {
+  /* The right and left classes determine the side we attach our banner to */
+  position: absolute;
+
+  /* Add a bit of padding to give some substance outside the "stitching" */
+  padding: 2px 0;
+
+  /* Set the base colour */
+  background-color: #a00;
+
+  /* Set a gradient: transparent black at the top to almost-transparent black at the bottom */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0.15)));
+  background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));
+
+  /* Add a drop shadow */
+  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);
+
+  /* Set the font */
+  font: 700 13px "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  z-index: 9999;
+  pointer-events: auto;
+}
+
+.github-fork-ribbon a,
+.github-fork-ribbon a:hover {
+  /* Set the text properties */
+  color: #fff;
+  text-decoration: none;
+  text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
+  text-align: center;
+
+  /* Set the geometry. If you fiddle with these you'll also need
+     to tweak the top and right values in .github-fork-ribbon. */
+  width: 200px;
+  line-height: 20px;
+
+  /* Set the layout properties */
+  display: inline-block;
+  padding: 2px 0;
+
+  /* Add "stitching" effect */
+  border-width: 1px 0;
+  border-style: dotted;
+  border-color: #fff;
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.github-fork-ribbon-wrapper {
+  width: 150px;
+  height: 150px;
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.github-fork-ribbon-wrapper.fixed {
+  position: fixed;
+}
+
+.github-fork-ribbon-wrapper.left {
+  left: 0;
+}
+
+.github-fork-ribbon-wrapper.right {
+  right: 0;
+}
+
+.github-fork-ribbon-wrapper.left-bottom {
+  position: fixed;
+  top: inherit;
+  bottom: 0;
+  left: 0;
+}
+
+.github-fork-ribbon-wrapper.right-bottom {
+  position: fixed;
+  top: inherit;
+  bottom: 0;
+  right: 0;
+}
+
+.github-fork-ribbon-wrapper.right .github-fork-ribbon {
+  top: 42px;
+  right: -43px;
+
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.github-fork-ribbon-wrapper.left .github-fork-ribbon {
+  top: 42px;
+  left: -43px;
+
+  -webkit-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+
+.github-fork-ribbon-wrapper.left-bottom .github-fork-ribbon {
+  top: 80px;
+  left: -43px;
+
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.github-fork-ribbon-wrapper.right-bottom .github-fork-ribbon {
+  top: 80px;
+  right: -43px;
+
+  -webkit-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #c8c9bd;
+  color: #5c2b35;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+.site-title {
+  font-family: 'Great Vibes', cursive;
+  font-weight: normal;
+  font-size: 61px;
+  padding: 10px 0px 0 20px;
+  border-bottom: 1px dotted #15191c;
+  margin: 0;
+  background: #382b35;
+}
+.site-title a {
+  color: #c8c9bd;
+}
+.site-title a:hover,
+.site-title a:active {
+  text-decoration: none;
+}
+button,
+.button {
+  padding: 0px 5px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.4;
+  border: none;
+  border-radius: 4px;
+  -webkit-transition: border 0.25s linear, color 0.25s linear, background-color 0.25s linear;
+  transition: border 0.25s linear, color 0.25s linear, background-color 0.25s linear;
+  -webkit-font-smoothing: subpixel-antialiased;
+  background: #382b35;
+  color: #ffffff;
+  cursor: pointer;
+}
+button:hover,
+.button:hover {
+  background: #544250;
+}
+button.large,
+.button.large {
+  padding: 5px 15px;
+  font-size: 18px;
+}
+input,
+textarea,
+select {
+  border: 1px solid #382b35;
+}
+.flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.flex input,
+.flex textarea {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+.flexButton {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.flexButton input,
+.flexButton textarea {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+.flexButton button,
+.flexButton .button {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+fieldset {
+  border: 1px solid #544250;
+}
+fieldset ol {
+  list-style: none;
+}
+.recipe-view ul.recipe-ingredients-list {
+  list-style: none;
+}
+nav {
+  display: block;
+  border-bottom: 1px dotted #15191c;
+  font-size: 18px;
+  padding-left: 10px;
+  height: 20px;
+}
+nav ul {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: inline;
+  list-style: none;
+  height: 20px;
+}
+nav ul li {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: inline;
+  float: left;
+}
+nav ul li a {
+  padding: 0 10px;
+}
+nav ul li a:hover {
+  margin: 0;
+  border: 0;
+  background: #382b35;
+  color: #ffffff;
+  height: 20px;
+  text-decoration: none;
+}
+template {
+  display: none;
+}
+#outlet {
+  margin: 20px;
+}
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 20px;
+  text-align: center;
+  background-color: #aaaaaa;
+  color: #666666;
+  z-index: 100;
+}
+.recipe-listing {
+  border: 1px dotted silver;
+  margin: 5px;
+  padding: 5px;
+}
+.filterable-recipe-table .recipe {
+  border: 1px dotted #382b35;
+  margin-bottom: 10px;
+}
+.filterable-recipe-table .recipe-name {
+  font-weight: bold;
+}
+.filterable-recipe-table .recipe-description {
+  padding-left: 10px;
+}

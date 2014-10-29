@@ -1,0 +1,53 @@
+{
+  "name": "coquere",
+  "version": "0.0.1",
+  "description": "A cookbook application developed in Node.js",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "Recipes",
+    "Cookbook",
+    "Cooking"
+  ],
+  "author": "Jeremy Darling <Jeremy.Darling@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^0.9.0",
+    "bunyan": "^1.2.0",
+    "hapi": "^7.1.1",
+    "longjohn": "^0.2.4",
+    "prodio-orm": "0.0.6",
+    "react": "^0.12.0",
+    "semver": "^4.1.0",
+    "sift": "^0.1.0",
+    "socket.io": "^1.1.0"
+  },
+  "devDependencies": {
+    "browserify": "^6.1.0",
+    "del": "^0.1.3",
+    "gulp": "^3.8.9",
+    "gulp-autoprefixer": "^1.0.1",
+    "gulp-imagemin": "^1.2.1",
+    "gulp-inject": "^1.0.2",
+    "gulp-less": "^1.3.6",
+    "gulp-minify-css": "^0.3.11",
+    "gulp-rename": "^1.2.0",
+    "gulp-replace": "^0.4.0",
+    "reactify": "^0.14.0",
+    "vinyl-source-stream": "^1.0.0"
+  },
+  "bin": {
+    "coquere": "app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:jdarling/coquere.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jdarling/coquere/issues"
+  },
+  "homepage": "https://github.com/jdarling/coquere"
+}

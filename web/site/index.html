@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="/style/style.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
+  </head>
+  <body>
+    <div class="github-fork-ribbon-wrapper right">
+      <div class="github-fork-ribbon">
+        <a href="">Fork me on GitHub</a>
+      </div>
+    </div>
+    <header>
+      <h1 class="site-title"><a href="#">Coquere</a></h1>
+      <nav>
+        <ul>
+          <li><a href="#recipes">Recipes</a></li>
+          <li><a href="#recipes/new">Add Recipe</a></li>
+          <!--
+          <li><a href="#login">Login</a></li>
+          <li><a href="#signup">Signup</a></li>
+          -->
+        </ul>
+      </nav>
+    </header>
+    <div id="outlet"></div>
+    <footer>Built with React, Satnav, and Hapi</footer>
+    <template id="loading">
+      Loading...
+    </template>
+    
+    <template id="home">
+  <p>Bla bla bla, something about having a personal recipe website.</p>
+</template>
+
+    <template id="recipes" nav="recipes">
+  <div class="recipe-listing" data-component="FilterableRecipeTable" data-api="/api/v1/recipes"></div>
+</template>
+
+    <template id="login" nav="login">
+  Login will be available soon, for now its just a placeholder page.
+</template>
+
+    <template id="newrecipe" nav="recipes/new">
+  <div class="recipe-view" data-component="RecipeEditor"></div>
+</template>
+
+    <template id="signup" nav="signup">
+  Signup will be available soon, for now its just a placeholder page.
+</template>
+
+    <template id="viewrecipe" nav="recipes/{id}" data-api="/api/v1/recipe/{id}">
+  <div class="recipe-view" data-component="RecipeView"></div>
+</template>
+
+    
+    <script type="text/javascript" src="/js/app.js"></script>
+  </body>
+</html>
