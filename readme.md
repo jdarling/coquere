@@ -52,6 +52,9 @@ Installation
 Clone the repo:
 
 ```
+git clone git@github.com:jdarling/coquere.git
+or
+git clone https://github.com/jdarling/coquere.git
 ```
 
 Edit the config.json for your DB of choice.
