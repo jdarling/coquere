@@ -78,8 +78,45 @@ button, .button{
   }
 }
 
+fieldset.toggle{
+  legend{
+    label{
+      cursor: pointer;
+    }
+    & + input[type=checkbox]{
+      position: absolute;
+      left: -100;
+      top: -100;
+      & + div{
+        display: none;
+      }
+      &:checked + div{
+        display: block;
+      }
+    }
+  }
+}
+
+.flex-100{
+  width: 100%;
+}
+
+.flex-40{
+  flex: 1 40%;
+}
+
+.flex-60{
+  flex: 1 60%;
+}
+
 input, textarea, select{
   border: 1px solid @purple;
+}
+
+textarea.nowrap {
+  white-space: pre;
+  word-wrap: normal;
+  overflow-x: scroll;
 }
 
 .flex{
@@ -87,6 +124,14 @@ input, textarea, select{
   input, textarea{
     flex: 1;
   }
+}
+
+.width-100{
+  width: 100%;
+}
+
+.height-500px{
+  height: 500px;
 }
 
 .flexButton{

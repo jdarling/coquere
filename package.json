@@ -18,10 +18,12 @@
     "async": "^0.9.0",
     "bunyan": "^1.2.0",
     "hapi": "^7.1.1",
+    "ingredientparser": "0.0.1",
     "longjohn": "^0.2.4",
     "prodio-orm": "0.0.6",
     "react": "^0.12.0",
     "semver": "^4.1.0",
+    "showdown": "^0.3.1",
     "sift": "^0.1.0",
     "socket.io": "^1.1.0"
   },
@@ -36,7 +38,7 @@
     "gulp-minify-css": "^0.3.11",
     "gulp-rename": "^1.2.0",
     "gulp-replace": "^0.4.0",
-    "reactify": "^0.14.1",
+    "reactify": "^0.15.2",
     "vinyl-source-stream": "^1.0.0"
   },
   "bin": {

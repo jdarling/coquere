@@ -1,9 +1,11 @@
+var React = require('react');
+
 var Views = function(autoLoad){
   var self = this;
   self._views = {};
   if(autoLoad instanceof Array){
     autoLoad.forEach(function(views){
-      self.addViews(views);
+      self.add(views);
     });
   }
 };
@@ -13,7 +15,7 @@ Views.prototype.add = function(views){
   (views instanceof Array?views:[views]).forEach(function(view){
     var keys = Object.keys(view);
     keys.forEach(function(name){
-      self._views[name] = view[name];
+      self._views[name] = React.createFactory(view[name]);
     });
   });
 };

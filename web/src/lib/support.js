@@ -78,6 +78,10 @@ module.exports = {
     return !isNaN(parseFloat(n)) && isFinite(n);
   },
 
+  isFraction: function(n){
+    return n.match(/^(\d+\W\d+\/\d+|\d+\/\d+)$/);
+  },
+
   decodeValue: function(value){
     if(this.isNumeric(value)){
       return +value;

@@ -189,10 +189,44 @@ button.large,
   padding: 5px 15px;
   font-size: 18px;
 }
+fieldset.toggle legend label {
+  cursor: pointer;
+}
+fieldset.toggle legend + input[type=checkbox] {
+  position: absolute;
+  left: -100;
+  top: -100;
+}
+fieldset.toggle legend + input[type=checkbox] + div {
+  display: none;
+}
+fieldset.toggle legend + input[type=checkbox]:checked + div {
+  display: block;
+}
+.flex-100 {
+  width: 100%;
+}
+.flex-40 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 40%;
+      -ms-flex: 1 40%;
+          flex: 1 40%;
+}
+.flex-60 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 60%;
+      -ms-flex: 1 60%;
+          flex: 1 60%;
+}
 input,
 textarea,
 select {
   border: 1px solid #382b35;
+}
+textarea.nowrap {
+  white-space: pre;
+  word-wrap: normal;
+  overflow-x: scroll;
 }
 .flex {
   display: -webkit-box;
@@ -206,6 +240,12 @@ select {
   -webkit-flex: 1;
       -ms-flex: 1;
           flex: 1;
+}
+.width-100 {
+  width: 100%;
+}
+.height-500px {
+  height: 500px;
 }
 .flexButton {
   display: -webkit-box;

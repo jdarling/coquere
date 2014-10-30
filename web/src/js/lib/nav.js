@@ -19,10 +19,10 @@ var displayPage = function(pageName, data){
         if(err){
           throw new Error(err);
         }
-        return React.renderComponent(views.get(componentName)({data: response, container: el}), el);
+        return React.render(views.get(componentName)({data: response, container: el}), el);
       });
     }
-    return React.renderComponent(views.get(componentName)({data: data, container: el}), el);
+    return React.render(views.get(componentName)({data: data, container: el}), el);
   });
   while (pane.firstChild) {
     pane.removeChild(pane.firstChild);

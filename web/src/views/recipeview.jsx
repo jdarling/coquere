@@ -1,4 +1,9 @@
 var React = require('react/addons');
+var Support = require('../lib/support');
+var val = Support.val;
+var isNumeric = Support.isNumeric;
+var isFraction = Support.isFraction;
+var parseRecipe = require('../js/lib/recipeParser');
 
 var Views = {};
 
@@ -33,7 +38,7 @@ var CrossoutCheckbox = Views.CrossoutCheckbox = React.createClass({
 var IngredientsListing = Views.IngredientsListing = React.createClass({
   render: function(){
     var ingredients = [];
-    this.props.ingredients.forEach(function(ingredient, index){
+    (this.props.ingredients||[]).forEach(function(ingredient, index){
       var text = ingredient.amount+' '+
         ingredient.unit+' '+
         ingredient.name+' '+
@@ -56,7 +61,7 @@ var IngredientsListing = Views.IngredientsListing = React.createClass({
 var DirectionsListing = Views.DirectionsListing = React.createClass({
   render: function(){
     var steps = [];
-    this.props.steps.forEach(function(step, index){
+    (this.props.steps||[]).forEach(function(step, index){
       steps.push(
         <p key={index}>
           <CrossoutCheckbox text={step.directions} index={index} />
@@ -67,7 +72,7 @@ var DirectionsListing = Views.DirectionsListing = React.createClass({
       <div>
         {steps}
       </div>
-    )
+    );
   }
 });
 
@@ -86,38 +91,60 @@ var RecipeView = Views.RecipeView = React.createClass({
           steps={this.props.data.steps}
         />
       </div>
-    )
+    );
   }
 });
 
 var RecipeEditor = Views.RecipeEditor = React.createClass({
+  getInitialState: function () {
+    return {
+        recipe: this.props.recipe||{}
+      };
+  },
+  recipeUpdate: function(e){
+    console.log('Parsing recipe');
+    var recipe = parseRecipe(val(e.target));
+    this.setState({
+      recipe: recipe
+    });
+  },
   render: function(){
+    //var recipe = this.props.recipe||{name: "Foo", description: "Something about foo"};
     return (
       <form className="recipe-editor">
-        <fieldset>
-          <legend>General</legend>
-          <ol>
-            <li><label className="required">Name:<span className="ast">*</span><span className="flex"><input type="text" /></span></label></li>
-            <li><label className="required">Description:<span className="ast">*</span><span className="flex"><textarea /></span></label></li>
-          </ol>
+        <fieldset className="flex toggle">
+          <legend><label htmlFor="show_sample" title="Click to open/close">Sample</label></legend>
+          <input id="show_sample" type="checkbox" className="offscreen" />
+          <div>Recipe Title<br />
+Author: Some Person<br />
+From: Some Website<br />
+<br />
+This is where the description of the recipe goes, you can make it as long or short as you want.  The description ends when the word ingredients is seen on its own on one line.<br />
+<br />
+Ingredients<br />
+<br />
+1 1/2 cups white sugar<br />
+1/2 cup cocoa powder<br />
+1/4 cup rice flour<br />
+<br />
+Directions<br />
+<br />
+Here is where your directions go.  They start when the word directions is seen on a line of its own.<br />
+<br />
+Each block is divided by a blank line.</div>
         </fieldset>
-        <fieldset>
-          <legend>Ingredients</legend>
-          <ol>
-            <li className="flexButton"><input type="text" placeholder="1 Egg Seperated" /><button>-</button></li>
-            <li><button>+ Add Ingredient</button></li>
-          </ol>
-        </fieldset>
-        <fieldset>
-          <legend>Directions</legend>
-          <ol>
-            <li className="flexButton"><input type="text" placeholder="Preheat oven to 350" /><button>-</button></li>
-            <li><button>+ Add Step</button></li>
-          </ol>
-        </fieldset>
-        <button className="large">Add Recipe</button>
+        <div className="flex">
+          <fieldset className="flex-60">
+            <legend>Recipe</legend>
+            <textarea onChange={this.recipeUpdate} className="width-100 height-500px" />
+          </fieldset>
+          <fieldset className="flex-40">
+            <legend>Preview</legend>
+            <RecipeView data={this.state.recipe} />
+          </fieldset>
+        </div>
       </form>
-    )
+    );
   }
 });
 
