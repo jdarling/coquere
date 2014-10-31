@@ -162,7 +162,7 @@ var RecipeEditor = Views.RecipeEditor = React.createClass({
   saveRecipe: function(){
     var self = this;
     var recipe = this.state.recipe;
-    var hasId = isNumeric(this.state.id);
+    var hasId = this.state.id||isNumeric(this.state.id);
     var uri = hasId?'/api/v1/recipe/'+this.state.id:'/api/v1/recipe';
     loader.post(uri, {data: recipe}, function(err, response){
       if(err){
