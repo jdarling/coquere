@@ -1,9 +1,13 @@
 var React = require('react/addons');
+var loader = require('../lib/loader');
 var Support = require('../lib/support');
 var val = Support.val;
 var isNumeric = Support.isNumeric;
 var isFraction = Support.isFraction;
-var parseRecipe = require('../js/lib/recipeParser');
+var RecipeLib = require('../js/lib/recipeParser');
+var parseRecipe = RecipeLib.parseRecipe;
+var stringifyRecipe = RecipeLib.stringifyRecipe;
+var alertify = require('../vendor/alertify/alertify').alertify;
 
 var Views = {};
 
@@ -20,7 +24,7 @@ var CrossoutCheckbox = Views.CrossoutCheckbox = React.createClass({
   },
   render: function(){
     var labelStyle={
-      'text-decoration': this.state.complete?'line-through':''
+      textDecoration: this.state.complete?'line-through':''
     };
     return (
       <label style={labelStyle}>
@@ -38,11 +42,17 @@ var CrossoutCheckbox = Views.CrossoutCheckbox = React.createClass({
 var IngredientsListing = Views.IngredientsListing = React.createClass({
   render: function(){
     var ingredients = [];
+    var textPart = function(part){
+      if(part){
+        return part + ' ';
+      }
+      return '';
+    };
     (this.props.ingredients||[]).forEach(function(ingredient, index){
-      var text = ingredient.amount+' '+
-        ingredient.unit+' '+
-        ingredient.name+' '+
-        (ingredient.prep||'');
+      var text = textPart(ingredient.amount)+
+        textPart(ingredient.unit)+
+        textPart(ingredient.name)+
+        textPart(ingredient.prep);
       ingredients.push(<li className="recipe-ingredient" key={index}>
           <CrossoutCheckbox
             text={text}
@@ -50,11 +60,14 @@ var IngredientsListing = Views.IngredientsListing = React.createClass({
             onItemCompleteChange={this.handleItemCompleteChange} />
         </li>);
     }.bind(this));
-    return (
-      <ul className="recipe-ingredients-list">
-        {ingredients}
-      </ul>
-    );
+    return ingredients.length?(
+      <div>
+        <h2>Ingredients</h2>
+        <ul className="recipe-ingredients-list">
+          {ingredients}
+        </ul>
+      </div>
+    ):<span />;
   }
 });
 
@@ -68,25 +81,50 @@ var DirectionsListing = Views.DirectionsListing = React.createClass({
         </p>
       );
     }.bind(this));
-    return (
+    return steps.length?(
       <div>
+        <h2>Directions</h2>
         {steps}
       </div>
+    ):<span />;
+  }
+});
+
+var RecipeEditButton = Views.RecipeEditButton = React.createClass({
+  getInitialState: function () {
+    return {
+        id: this.props.recipeId
+      };
+  },
+  editRecipe: function(){
+    window.location.href = '#recipes/edit/'+this.state.id;
+  },
+  render: function(){
+    return (
+      <button onClick={this.editRecipe}>Edit</button>
     );
   }
 });
 
 var RecipeView = Views.RecipeView = React.createClass({
+  getInitialState: function () {
+    return {
+        recipe: this.props.recipe||this.props.data||{}
+      };
+  },
   render: function(){
+    var description = [];
+    var editButton = this.props.noEdit?'':<RecipeEditButton recipeId={this.state.recipe._id}/>;
+    (this.props.data.description||'').split('\n').forEach(function(line, index){
+      description.push(<p key={index}>{line}</p>);
+    });
     return (
       <div>
-        <h1>{this.props.data.name}</h1>
-        <p>{this.props.data.description}</p>
-        <h2>Ingredients</h2>
+        <h1>{this.props.data.name}{editButton}</h1>
+        {description}
         <IngredientsListing
           ingredients={this.props.data.ingredients}
         />
-        <h2>Directions</h2>
         <DirectionsListing
           steps={this.props.data.steps}
         />
@@ -98,18 +136,55 @@ var RecipeView = Views.RecipeView = React.createClass({
 var RecipeEditor = Views.RecipeEditor = React.createClass({
   getInitialState: function () {
     return {
-        recipe: this.props.recipe||{}
+        id: (this.props.recipe||this.props.data||{})._id,
+        recipe: this.props.recipe||this.props.data||{}
       };
   },
+  resizeEditor: function(){
+    var t = this.refs.recipeSource.getDOMNode();
+    var offset= !window.opera ? (t.offsetHeight - t.clientHeight) : (t.offsetHeight + parseInt(window.getComputedStyle(t, null).getPropertyValue('border-top-width')));
+    t.style.height = 'auto';
+    t.style.height = (t.scrollHeight  + offset ) + 'px';
+  },
   recipeUpdate: function(e){
-    console.log('Parsing recipe');
     var recipe = parseRecipe(val(e.target));
+    this.resizeEditor();
     this.setState({
       recipe: recipe
     });
   },
+  refreshPreview: function(){
+    var recipe = parseRecipe(val(this.refs.recipeSource.getDOMNode()));
+    this.setState({
+      recipe: recipe
+    });
+  },
+  saveRecipe: function(){
+    var self = this;
+    var recipe = this.state.recipe;
+    var hasId = isNumeric(this.state.id);
+    var uri = hasId?'/api/v1/recipe/'+this.state.id:'/api/v1/recipe';
+    loader.post(uri, {data: recipe}, function(err, response){
+      if(err){
+        if(err.errors){
+          return alertify.error('Too little information provided, please complete a basic recipe');
+        }
+        return alertify.error(err.error||err);
+      }
+      if(!hasId){
+        self.setState({
+          recipe: response,
+          id: response._id
+        });
+      }
+      return alertify.success(hasId?'Updated':'Created');
+    });
+  },
+  componentDidMount: function(){
+    this.resizeEditor();
+  },
   render: function(){
-    //var recipe = this.props.recipe||{name: "Foo", description: "Something about foo"};
+    var recipeSource = this.state.recipe?stringifyRecipe(this.state.recipe):'';
     return (
       <form className="recipe-editor">
         <fieldset className="flex toggle">
@@ -136,11 +211,13 @@ Each block is divided by a blank line.</div>
         <div className="flex">
           <fieldset className="flex-60">
             <legend>Recipe</legend>
-            <textarea onChange={this.recipeUpdate} className="width-100 height-500px" />
+            <textarea ref="recipeSource" onChange={this.recipeUpdate} className="width-100" defaultValue={recipeSource} placeholder="Enter your recipe here..." />
+            <button onClick={this.refreshPreview}>Refresh Preview</button>
+            <button onClick={this.saveRecipe}>Save</button>
           </fieldset>
           <fieldset className="flex-40">
             <legend>Preview</legend>
-            <RecipeView data={this.state.recipe} />
+            <RecipeView data={this.state.recipe} noEdit={true} />
           </fieldset>
         </div>
       </form>

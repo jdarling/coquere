@@ -21,6 +21,8 @@ a:hover,a:active{
 
 @import (inline) "./gh-fork-ribbon.css";
 @import url(http://fonts.googleapis.com/css?family=Great+Vibes);
+@import (inline) "../vendor/alertify/alertify.core.css";
+@import (inline) "../vendor/alertify/alertify.default.css";
 
 body{
   margin: 0;
@@ -131,7 +133,9 @@ textarea.nowrap {
 }
 
 .height-500px{
-  height: 500px;
+  height: 100%;
+  min-height: 500px;
+  box-sizing: border-box;
 }
 
 .flexButton{

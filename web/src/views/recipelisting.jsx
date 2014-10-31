@@ -12,8 +12,12 @@ var RecipeNameRow = Views.RecipeNameRow = React.createClass({
 
 var RecipeDescriptionRow = Views.RecipeDescriptionRow = React.createClass({
   render: function(){
+    var description = [];
+    (this.props.recipe.description||'').split('\n').forEach(function(line, index){
+      description.push(<p key={index}>{line}</p>);
+    });
     return (
-      <div className="recipe-description">{this.props.recipe.description}</div>
+      <div className="recipe-description">{description}</div>
     );
   }
 });
@@ -24,6 +28,9 @@ var RecipeTable = Views.RecipeTable = React.createClass({
     var reIsMatch = new RegExp(this.props.filterText, 'i');
     this.props.recipes.forEach(function(recipe) {
       if(this.props.titleOnly && !reIsMatch.exec(recipe.name)){
+        return;
+      }
+      if((!recipe.description) && (!reIsMatch.exec(recipe.name))){
         return;
       }
       if((!reIsMatch.exec(recipe.name)) && (recipe.description && !reIsMatch.exec(recipe.description))){

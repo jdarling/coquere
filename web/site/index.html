@@ -25,9 +25,13 @@
     <div id="outlet"></div>
     <footer>Built with React, Satnav, and Hapi</footer>
     <template id="loading">
-      Loading...
+      <div data-component="LoadingNotifier"></div>
     </template>
     
+    <template id="newrecipe" nav="recipes/edit/{id}" data-api="/api/v1/recipe/{id}">
+  <div class="recipe-view" data-component="RecipeEditor"></div>
+</template>
+
     <template id="home">
   <p>Bla bla bla, something about having a personal recipe website.</p>
 </template>

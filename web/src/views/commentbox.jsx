@@ -2,7 +2,9 @@ var Loader = require('../lib/loader');
 var React = require('react');
 var converter = new Showdown.converter();
 
-var Comment = React.createClass({
+var Views = {};
+
+var Comment = Views.Comment = React.createClass({
   render: function() {
     var rawMarkup = converter.makeHtml(this.props.children.toString());
     return (
@@ -16,7 +18,7 @@ var Comment = React.createClass({
   }
 });
 
-var CommentBox = React.createClass({
+var CommentBox = Views.CommentBox = React.createClass({
   loadCommentsFromServer: function() {
     $.ajax({
       url: this.props.url,
@@ -68,7 +70,7 @@ var CommentBox = React.createClass({
   }
 });
 
-var CommentList = React.createClass({
+var CommentList = Views.CommentList = React.createClass({
   render: function() {
     var commentNodes = this.props.data.map(function(comment, index) {
       return (
@@ -88,7 +90,7 @@ var CommentList = React.createClass({
   }
 });
 
-var CommentForm = React.createClass({
+var CommentForm = Views.CommentForm = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
     var author = this.refs.author.getDOMNode().value.trim();
@@ -111,3 +113,5 @@ var CommentForm = React.createClass({
     );
   }
 });
+
+module.exports = Views;

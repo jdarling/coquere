@@ -11,23 +11,35 @@ var displayPage = function(pageName, data){
   var template = el('#'+(pageName||'home'));
   var pane = el('#outlet');
   var content = template.content.cloneNode(true);
-  (els(content, '[data-component]')||[]).forEach(function(el){
-    var componentName = el.dataset.component;
-    var api = el.dataset.api;
-    if(api){
-      return Loader.get(api, function(err, response){
-        if(err){
-          throw new Error(err);
-        }
-        return React.render(views.get(componentName)({data: response, container: el}), el);
-      });
+  var components = (els(content, '[data-component]')||[]);
+  var displayPage = function(){
+    while(pane.firstChild){
+      pane.removeChild(pane.firstChild);
     }
-    return React.render(views.get(componentName)({data: data, container: el}), el);
-  });
-  while (pane.firstChild) {
-    pane.removeChild(pane.firstChild);
+    pane.appendChild(content);
+  };
+  if(components.length){
+    return components.forEach(function(el){
+      var componentName = el.dataset.component;
+      var api = el.dataset.api;
+      var Component = views.get(componentName);
+      if(!Component){
+        throw new Error(componentName+' is not registered');
+      }
+      if(api){
+        return Loader.get(api, function(err, response){
+          if(err){
+            throw new Error(err);
+          }
+          displayPage();
+          return React.render(Component({data: response, container: el}), el);
+        });
+      }
+      displayPage();
+      return React.render(Component({data: data, container: el}), el);
+    });
   }
-  pane.appendChild(content);
+  displayPage();
 };
 
 var nav = Satnav({
