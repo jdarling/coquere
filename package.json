@@ -56,7 +56,7 @@
     "url": "https://github.com/jdarling/coquere/issues"
   },
   "homepage": "https://github.com/jdarling/coquere",
-  "subdomain": "jdarling-cookbook",
+  "subdomain": "coquere",
   "engines": {
     "node": "0.10.x"
   }
