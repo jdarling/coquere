@@ -1,5 +1,6 @@
 var async = require('async');
 var Recipe = require('../../lib/orm').Recipe;
+var Hapi = require('hapi');
 
 var listRecords = function(req, reply){
   var self = this;
@@ -21,6 +22,7 @@ var postRecord = function(req, reply){
     if(err){
       return reply(err);
     }
+    recipe.createdBy = req.auth.credentials._id;
     self.insert(recipe, function(err, record){
       reply(err||{
         root: 'recipe',
@@ -35,6 +37,9 @@ var postRecords = function(req, reply){
   var records = req.payload;
   if(!records instanceof Array){
     return reply(new Error('Must supply an array of recipes'));
+  }
+  if((req.auth.credentials.rights||[]).indexOf('recipes:update:all')===-1){
+    return reply(Hapi.boom.unauthorized(null, 'recipes:update:all'));
   }
   var inserts = [];
   async.eachLimit(records, 10, function(record, next){
@@ -54,10 +59,14 @@ var postRecords = function(req, reply){
 
 var putRecord = function(req, reply){
   var self = this;
+  if((req.auth.credentials.rights||[]).indexOf('recipes:update:all')===-1){
+    return reply(Hapi.boom.unauthorized(null, 'recipes:update:all'));
+  }
   Recipe.validate(req.payload, function(err, recipe){
     if(err){
       return reply(err);
     }
+    recipe.updatedBy = req.auth.credentials._id;
     self.update(req.params.id, recipe, function(err, response){
       reply(err||{
         root: 'recipe',
@@ -69,6 +78,9 @@ var putRecord = function(req, reply){
 
 var deleteRecord = function(req, reply){
   var self = this;
+  if((req.auth.credentials.rights||[]).indexOf('recipes:delete:all')===-1){
+    return reply(Hapi.boom.unauthorized(null, 'recipes:delete:all'));
+  }
   self.delete(req.params.id, function(err, response){
     reply(err||response);
   });
@@ -93,32 +105,50 @@ module.exports = function(options, next){
     {
       method: 'POST',
       path: config.route + 'recipe',
-      handler: postRecord.bind(store)
+      handler: postRecord.bind(store),
+      config: {
+        auth: 'simple'
+      }
     },
     {
       method: 'PUT',
       path: config.route + 'recipe',
-      handler: postRecord.bind(store)
+      handler: postRecord.bind(store),
+      config: {
+        auth: 'simple'
+      }
     },
     {
       method: 'PUT',
       path: config.route + 'recipe/{id}',
-      handler: putRecord.bind(store)
+      handler: putRecord.bind(store),
+      config: {
+        auth: 'simple'
+      }
     },
     {
       method: 'POST',
       path: config.route + 'recipe/{id}',
-      handler: putRecord.bind(store)
+      handler: putRecord.bind(store),
+      config: {
+        auth: 'simple'
+      }
     },
     {
       method: 'DELETE',
       path: config.route + 'recipe/{id}',
-      handler: deleteRecord.bind(store)
+      handler: deleteRecord.bind(store),
+      config: {
+        auth: 'simple'
+      }
     },
     {
       method: 'POST',
       path: config.route + 'recipes',
-      handler: postRecords.bind(store)
+      handler: postRecords.bind(store),
+      config: {
+        auth: 'simple'
+      }
     }
   ]);
   next();
