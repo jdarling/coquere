@@ -52,5 +52,9 @@
   "bugs": {
     "url": "https://github.com/jdarling/coquere/issues"
   },
-  "homepage": "https://github.com/jdarling/coquere"
+  "homepage": "https://github.com/jdarling/coquere",
+  "subdomain": "jdarling-cookbook",
+  "engines": {
+    "node": "0.10.x"
+  }
 }
