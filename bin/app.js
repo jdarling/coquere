@@ -3,13 +3,13 @@ try{
 }catch(e){}
 var logger = require('../lib/logger');
 var config = require('../lib/config').config;
-var cluster = require('cluster');
-var useCluster = (process.env.NODE_ENV==='production')||config.cluster;
+var useCluster = config.cluster;
 
 if(!useCluster){
   logger.info('Running in single threaded model');
   module.exports = require('./process');
 }else{
+  var cluster = require('cluster');
   var numCPUs = config.numWorkers||require('os').cpus().length;
   //numCPUs = 4;
 
