@@ -4,5 +4,10 @@
       type: 'leveldb',
       provider: 'leveldown'
     }
+  },
+  production: {
+    store: {
+      type: 'memory'
+    }
   }
 }

@@ -1,4 +1,6 @@
-require('longjohn');
+try{
+  require('longjohn');
+}catch(e){}
 var logger = require('../lib/logger');
 var config = require('../lib/config').config;
 var cluster = require('cluster');

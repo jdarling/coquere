@@ -164,7 +164,6 @@ module.exports = function(options, next){
   var config = options.config;
   server.pack.register(Basic, function (err){
     server.auth.strategy('simple', 'basic', {validateFunc: validate});
-    server.auth.default('simple');
   });
   server.route([
     {

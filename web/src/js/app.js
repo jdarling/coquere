@@ -6,7 +6,6 @@ require('./lib/views').add([
   require('../views/recipelisting.jsx'),
   require('../views/recipeview.jsx'),
   require('../views/commentbox.jsx'),
-  require('../views/loadingnotifier.jsx'),
 ]);
 
 require('./lib/nav');

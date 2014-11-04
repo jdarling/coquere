@@ -4,6 +4,17 @@ var el = Support.el;
 var els = Support.els;
 var React = require('react');
 var views = require('./views');
+var async = require('async');
+
+var hideLoading = function(){
+  el('#loading').style.display='none';
+  el('#outlet').style.display='';
+};
+
+var showLoading = function(){
+  el('#loading').style.display='';
+  el('#outlet').style.display='none';
+};
 
 var displayPage = function(pageName, data){
   var path = (pageName||'').split('/');
@@ -12,14 +23,13 @@ var displayPage = function(pageName, data){
   var pane = el('#outlet');
   var content = template.content.cloneNode(true);
   var components = (els(content, '[data-component]')||[]);
-  var displayPage = function(){
-    while(pane.firstChild){
-      pane.removeChild(pane.firstChild);
-    }
-    pane.appendChild(content);
-  };
+  showLoading();
+  while(pane.firstChild){
+    pane.removeChild(pane.firstChild);
+  }
+  pane.appendChild(content);
   if(components.length){
-    return components.forEach(function(el){
+    return async.each(components, function(el, next){
       var componentName = el.dataset.component;
       var api = el.dataset.api;
       var Component = views.get(componentName);
@@ -31,15 +41,18 @@ var displayPage = function(pageName, data){
           if(err){
             throw new Error(err);
           }
-          displayPage();
-          return React.render(Component({data: response, container: el}), el);
+          React.render(Component({data: response, container: el}), el);
+          return next();
         });
       }
-      displayPage();
-      return React.render(Component({data: data, container: el}), el);
+
+      React.render(Component({data: data, container: el}), el);
+      return next();
+    }, function(){
+      hideLoading();
     });
   }
-  displayPage();
+  hideLoading();
 };
 
 var nav = Satnav({
@@ -86,7 +99,7 @@ e.forEach(function(e){
 
 nav
   .change(function(params, old){
-    displayPage('loading');
+    showLoading();
     nav.resolve();
     return this.defer;
   })

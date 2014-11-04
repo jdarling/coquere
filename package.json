@@ -24,7 +24,6 @@
     "ingredientparser": "0.0.1",
     "leveldown": "^1.0.0",
     "levelup": "^0.19.0",
-    "longjohn": "^0.2.4",
     "prodio-orm": "0.0.6",
     "react": "^0.12.0",
     "semver": "^4.1.0",
@@ -44,6 +43,7 @@
     "gulp-rename": "^1.2.0",
     "gulp-replace": "^0.4.0",
     "i": "^0.3.2",
+    "longjohn": "^0.2.4",
     "reactify": "^0.15.2",
     "vinyl-source-stream": "^1.0.0"
   },
