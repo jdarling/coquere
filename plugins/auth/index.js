@@ -231,13 +231,14 @@ module.exports = function(options, next){
       }
     },
   ]);
+    console.log(1);
   users.asArray({}, function(err, records){
     if(err){
       server.error(err);
       return next();
     }
     if(!(records[records.root]||[]).shift()){
-      bcrypt.hash(DEFAULT_USER.password, 8, function(err, hash){
+      return bcrypt.hash(DEFAULT_USER.password, 8, function(err, hash){
         if(err){
           server.error(err);
           return next();
@@ -248,6 +249,6 @@ module.exports = function(options, next){
         });
       });
     }
-    next();
+    return next();
   });
 };

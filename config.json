@@ -1,13 +1,15 @@
 {
   default: {
     store: {
-      type: 'leveldb',
-      provider: 'leveldown'
+      type: 'memory'
     }
   },
   production: {
+    web: {
+      port: 80
+    },
     store: {
-      type: 'memory'
+      type: 'redis'
     }
   }
 }
