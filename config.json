@@ -1,15 +1,7 @@
 {
   default: {
     store: {
-      type: 'memory'
+      type: 'mongodb'
     }
   },
-  production: {
-    web: {
-      port: 80
-    },
-    store: {
-      type: 'redis'
-    }
-  }
 }

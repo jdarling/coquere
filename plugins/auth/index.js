@@ -231,7 +231,6 @@ module.exports = function(options, next){
       }
     },
   ]);
-    console.log(1);
   users.asArray({}, function(err, records){
     if(err){
       server.error(err);
