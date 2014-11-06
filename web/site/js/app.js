@@ -7,11 +7,12 @@ require('./lib/views').add([
   require('../views/recipelisting.jsx'),
   require('../views/recipeview.jsx'),
   require('../views/commentbox.jsx'),
+  require('../views/serverstatus.jsx'),
 ]);
 
 require('./lib/nav');
 
-},{"../vendor/alertify/alertify":186,"../vendor/polyfills/templatePolyfill":187,"../vendor/satnav/satnav":188,"../views/commentbox.jsx":189,"../views/recipelisting.jsx":190,"../views/recipeview.jsx":191,"./lib/nav":181,"./lib/views":183}],2:[function(require,module,exports){
+},{"../vendor/alertify/alertify":187,"../vendor/polyfills/templatePolyfill":188,"../vendor/satnav/satnav":189,"../views/commentbox.jsx":190,"../views/recipelisting.jsx":191,"../views/recipeview.jsx":192,"../views/serverstatus.jsx":193,"./lib/nav":181,"./lib/views":183}],2:[function(require,module,exports){
 (function (process){
 /*!
  * async
@@ -22170,7 +22171,7 @@ nav
   ;
 nav.go();
 
-},{"../../lib/loader":184,"../../lib/support":185,"./views":183,"async":2,"react":180}],182:[function(require,module,exports){
+},{"../../lib/loader":184,"../../lib/support":186,"./views":183,"async":2,"react":180}],182:[function(require,module,exports){
 var ing = require('ingredientparser');
 var inflect = require('i');
 
@@ -22600,6 +22601,9 @@ define([], function(){
 });
 
 },{}],185:[function(require,module,exports){
+module.exports = io();
+
+},{}],186:[function(require,module,exports){
 module.exports = {
   el: function(src, sel){
     if(!sel){
@@ -22814,7 +22818,7 @@ module.exports = {
   }
 };
 
-},{}],186:[function(require,module,exports){
+},{}],187:[function(require,module,exports){
 (function (global){
 /**
  * alertify
@@ -23454,7 +23458,7 @@ module.exports = {
 }(this, global.document||document));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],187:[function(require,module,exports){
+},{}],188:[function(require,module,exports){
 (function templatePolyfill(d) {
   if('content' in d.createElement('template')) {
     return false;
@@ -23481,7 +23485,7 @@ module.exports = {
   }
 })(document);
 
-},{}],188:[function(require,module,exports){
+},{}],189:[function(require,module,exports){
 (function(w, d) {
 
 	/*
@@ -23698,7 +23702,7 @@ module.exports = {
 
 })(window, document);
 
-},{}],189:[function(require,module,exports){
+},{}],190:[function(require,module,exports){
 var Loader = require('../lib/loader');
 var React = require('react');
 var converter = new Showdown.converter();
@@ -23817,7 +23821,7 @@ var CommentForm = Views.CommentForm = React.createClass({displayName: 'CommentFo
 
 module.exports = Views;
 
-},{"../lib/loader":184,"react":180}],190:[function(require,module,exports){
+},{"../lib/loader":184,"react":180}],191:[function(require,module,exports){
 var React = require('react/addons');
 
 var Views = {};
@@ -23934,7 +23938,7 @@ var FilterableRecipeTable = Views.FilterableRecipeTable = React.createClass({dis
 
 module.exports = Views;
 
-},{"react/addons":19}],191:[function(require,module,exports){
+},{"react/addons":19}],192:[function(require,module,exports){
 var React = require('react/addons');
 var loader = require('../lib/loader');
 var Support = require('../lib/support');
@@ -24166,4 +24170,39 @@ React.createElement("br", null),
 
 module.exports = Views;
 
-},{"../js/lib/recipeParser":182,"../lib/loader":184,"../lib/support":185,"../vendor/alertify/alertify":186,"react/addons":19}]},{},[1]);
+},{"../js/lib/recipeParser":182,"../lib/loader":184,"../lib/support":186,"../vendor/alertify/alertify":187,"react/addons":19}],193:[function(require,module,exports){
+var React = require('react');
+var socket = require('../lib/socket');
+
+var Views = {};
+
+Views.ServerStatus = React.createClass({displayName: 'ServerStatus',
+  updateStatus: function(data){
+    this.setState({status: data});
+  },
+  getInitialState: function(){
+    return {
+      status: this.props.data||{mem: {}}
+    };
+  },
+  componentWillMount: function(){
+    socket.removeAllListeners('system::status');
+    socket.on('system::status', this.updateStatus);
+  },
+  componentWillUnmount: function(){
+  },
+  render: function(){
+    return (
+      React.createElement("div", null, 
+        React.createElement("div", null, React.createElement("strong", null, "Server Version:"), " v", this.state.status.version), 
+        React.createElement("div", null, React.createElement("strong", null, "Memory:"), " ", this.state.status.mem.heapUsed, " of ", this.state.status.mem.heapTotal), 
+        React.createElement("progress", {className: "all-100", value: this.state.status.mem.heapUsed, max: this.state.status.mem.heapTotal}), 
+        React.createElement("div", null, React.createElement("strong", null, "Uptime:"), " ", this.state.status.uptime, "s")
+      )
+    )
+  }
+});
+
+module.exports = Views;
+
+},{"../lib/socket":185,"react":180}]},{},[1]);

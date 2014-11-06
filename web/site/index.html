@@ -2,6 +2,7 @@
   <head>
     <link rel="stylesheet" href="/style/style.min.css">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <div class="github-fork-ribbon-wrapper right">
@@ -47,9 +48,15 @@
   <p>I wanted to learn React, and needed a place to put my families recipes so
     we could all get to them. So figured I'd build something and learn something
     at the same time.</p>
+  <h2>Hosting</h2>
+  <p>The demo version of Coquere is hosted on
+    <a href="https://www.nodejitsu.com/" target="_blank">Nodejitsu</a>
+    on their Free for Open Source program.</p>
   <h2>License</h2>
   <p>Coquere is Open Source and licensed under the MIT license.  Feel free to
     get the code, make your own, etc...</p>
+  <h2>Server Status</h2>
+  <div data-component="ServerStatus"></div>
 </template>
 
     <template id="recipes" nav="recipes">
