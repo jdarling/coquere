@@ -142,9 +142,11 @@ var RecipeEditor = Views.RecipeEditor = React.createClass({
   },
   resizeEditor: function(){
     var t = this.refs.recipeSource.getDOMNode();
-    var offset= !window.opera ? (t.offsetHeight - t.clientHeight) : (t.offsetHeight + parseInt(window.getComputedStyle(t, null).getPropertyValue('border-top-width')));
     t.style.height = 'auto';
-    t.style.height = (t.scrollHeight  + offset ) + 'px';
+    setTimeout(function(){
+      var offset= !window.opera ? (t.offsetHeight - t.clientHeight) : (t.offsetHeight + parseInt(window.getComputedStyle(t, null).getPropertyValue('border-top-width')));
+      t.style.height = (t.scrollHeight  + offset) + 'px';
+    }, 10);
   },
   recipeUpdate: function(e){
     var recipe = parseRecipe(val(e.target));
