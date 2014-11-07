@@ -2,6 +2,7 @@ var Basic = require('hapi-auth-basic');
 var users = require('../../lib/store')('users');
 var Hapi = require('hapi');
 var bcrypt = require('bcrypt');
+var User = require('../../lib/orm').User;
 
 var DEFAULT_USER={
   username: 'admin',
@@ -42,11 +43,17 @@ var createUser = function(req, reply){
   if((req.auth.credentials.rights||[]).indexOf('users:create')===-1){
     return reply(Hapi.boom.unauthorized(null, 'users:create'));
   }
-  users.insert(req.payload, function(err, account){
+  req.payload.active = true;
+  User.validate(req.payload, function(err, user){
     if(err){
       return reply(err);
     }
-    return reply(account);
+    users.insert(req.payload, function(err, account){
+      if(err){
+        return reply(err);
+      }
+      return reply(account);
+    });
   });
 };
 
@@ -82,7 +89,7 @@ var doUserUpdate = function(id, req, reply){
         user: account
       });
     });
-};
+  };
   users.get(id, function(err, raw){
     if(err){
       return reply(err);

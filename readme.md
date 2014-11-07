@@ -24,7 +24,7 @@ Planned Features
     for medium eggs.
   * Recipe Search - Search by name and/or description.
   * Ingredient Search - Search for recipes by ingredient list.
-  * Accounts
+  * User Accounts - Basic and integrated (Gmail, Facebook, etc...)
   * Share - Send to a friend, get a share URL for Facebook, G+, whatever, etc...
   * Ratings - Was a recipe good or bad, rate it and share you opinion.
   * Commenting - Add comments to recipes without providing a rating.
@@ -35,6 +35,15 @@ Planned Features
   * Fast editing - Allow paste of recipe text, try to parse it and create entry
     from the source.  Lots of work to do here.
   * ... ??? ... Open to ideas
+
+Demo Version
+============
+
+A demo version of the latest stable (working) release is hosted at
+http://coquere.jit.su/  Feel free to browse around and take a look at things.
+Security is enabled on the server but all basic functionality (view, edit,
+search) is enabled for anonymous users.  The only thing you can't do is save
+changes or new recipes.
 
 Requirements
 ============

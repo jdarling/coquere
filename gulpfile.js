@@ -40,9 +40,13 @@ gulp.task('styles', function() {
     ;
 });
 
+var reactifyES6 = function(file){
+  return reactify(file, {es6: true});
+};
+
 gulp.task('scripts', function(){
   var b = browserify();
-  b.transform(reactify); // use the reactify transform
+  b.transform(reactifyES6); // use the reactify transform
   b.add('./web/src/js/app.js');
   return b.bundle()
     .on('error', handleError)

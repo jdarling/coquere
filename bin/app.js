@@ -2,7 +2,7 @@ try{
   require('longjohn');
 }catch(e){}
 var logger = require('../lib/logger');
-var config = require('../lib/config').config;
+var config = require('../lib/config').values;
 var useCluster = config.cluster;
 
 if(!useCluster){
@@ -11,7 +11,6 @@ if(!useCluster){
 }else{
   var cluster = require('cluster');
   var numCPUs = config.numWorkers||require('os').cpus().length;
-  //numCPUs = 4;
 
   if(cluster.isMaster){
     for(var i = 0; i < numCPUs; i++){
