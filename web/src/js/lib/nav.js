@@ -106,3 +106,11 @@ nav
   .otherwise('/');
   ;
 nav.go();
+
+(function(){
+  var nav = el('header.primary nav');
+  var Controller = views.get('NavController');
+  Loader.get('/api/v1/user/me', function(err, me){
+    React.render(Controller({container: nav, me: me}), nav);
+  });
+})();

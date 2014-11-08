@@ -2,6 +2,9 @@
   default: {
     store: {
       type: 'mongodb'
+    },
+    auth: {
+      password: 'coquere'
     }
   },
 }

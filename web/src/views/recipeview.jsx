@@ -135,17 +135,23 @@ var RecipeView = Views.RecipeView = React.createClass({
 
 var RecipeEditor = Views.RecipeEditor = React.createClass({
   getInitialState: function () {
+    var sizingEditor = document.createElement('textarea');
+    document.body.appendChild(sizingEditor);
     return {
         id: (this.props.recipe||this.props.data||{})._id,
-        recipe: this.props.recipe||this.props.data||{}
+        recipe: this.props.recipe||this.props.data||{},
+        sizingEditor: sizingEditor
       };
   },
   resizeEditor: function(){
-    var t = this.refs.recipeSource.getDOMNode();
-    t.style.height = 'auto';
+    var editor = this.refs.recipeSource.getDOMNode();
+    var t = this.state.sizingEditor;
+    t.style.width = editor.style.width;
+    t.value = editor.value;
     setTimeout(function(){
+      t.style.width = (editor.clientWidth-10)+'px';
       var offset= !window.opera ? (t.offsetHeight - t.clientHeight) : (t.offsetHeight + parseInt(window.getComputedStyle(t, null).getPropertyValue('border-top-width')));
-      t.style.height = (t.scrollHeight  + offset) + 'px';
+      editor.style.height = t.scrollHeight + 'px';
     }, 10);
   },
   recipeUpdate: function(e){
@@ -183,6 +189,14 @@ var RecipeEditor = Views.RecipeEditor = React.createClass({
     });
   },
   componentDidMount: function(){
+    var editor = this.refs.recipeSource.getDOMNode();
+    var sizingEditor = this.state.sizingEditor;
+    sizingEditor.style = editor.style;
+    sizingEditor.style.height = 'auto';
+    sizingEditor.style.position = 'absolute';
+    sizingEditor.style.left = '-9999px';
+    sizingEditor.style.top = 0;
+    sizingEditor.style.height = 'auto';
     this.resizeEditor();
   },
   render: function(){
@@ -213,7 +227,7 @@ Each block is divided by a blank line.</div>
         <div className="flex">
           <fieldset className="flex-60">
             <legend>Recipe</legend>
-            <textarea ref="recipeSource" onChange={this.recipeUpdate} className="width-100" defaultValue={recipeSource} placeholder="Enter your recipe here..." />
+            <textarea ref="recipeSource" onChange={this.recipeUpdate} className="width-100 autoheight" defaultValue={recipeSource} placeholder="Enter your recipe here..." />
             <button onClick={this.refreshPreview}>Refresh Preview</button>
             <button onClick={this.saveRecipe}>Save</button>
           </fieldset>

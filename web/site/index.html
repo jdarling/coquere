@@ -10,17 +10,9 @@
         <a href="https://github.com/jdarling/coquere" target="_blank">Fork me on GitHub</a>
       </div>
     </div>
-    <header>
+    <header class="primary">
       <h1 class="site-title"><a href="#">Coquere</a></h1>
       <nav>
-        <ul>
-          <li><a href="#recipes">Recipes</a></li>
-          <li><a href="#recipes/new">Add Recipe</a></li>
-          <!--
-          <li><a href="#login">Login</a></li>
-          <li><a href="#signup">Signup</a></li>
-          -->
-        </ul>
       </nav>
     </header>
     <div id="outlet"></div>
@@ -64,11 +56,15 @@
 </template>
 
     <template id="login" nav="login">
-  Login will be available soon, for now its just a placeholder page.
+  <div data-component="LoginForm"></div>
 </template>
 
     <template id="newrecipe" nav="recipes/new">
   <div class="recipe-view" data-component="RecipeEditor"></div>
+</template>
+
+    <template id="profile" nav="profile" data-api="/api/v1/user/me">
+  <div data-component="ProfileView"></div>
 </template>
 
     <template id="signup" nav="signup">

@@ -416,6 +416,9 @@ fieldset.toggle legend + input[type=checkbox]:checked + div {
       -ms-flex: 1 60%;
           flex: 1 60%;
 }
+textarea.autoheight {
+  overflow-y: hidden;
+}
 input,
 textarea,
 select {
@@ -479,8 +482,8 @@ nav {
   display: block;
   border-bottom: 1px dotted #15191c;
   font-size: 18px;
-  padding-left: 10px;
   height: 20px;
+  padding: 0 50px 0 10px;
 }
 nav ul {
   margin: 0;
@@ -507,6 +510,9 @@ nav ul li a:hover {
   color: #ffffff;
   height: 20px;
   text-decoration: none;
+}
+.float-right {
+  float: right;
 }
 template {
   display: none;

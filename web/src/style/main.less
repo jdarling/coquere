@@ -115,6 +115,10 @@ fieldset.toggle{
   flex: 1 60%;
 }
 
+textarea.autoheight{
+  overflow-y: hidden;
+}
+
 input, textarea, select{
   border: 1px solid @purple;
   min-height: 2em;
@@ -174,8 +178,8 @@ nav{
   display: block;
   border-bottom: 1px dotted @black;
   font-size: 18px;
-  padding-left: 10px;
   height: 20px;
+  padding: 0 50px 0 10px;
   ul{
     margin: 0;
     padding: 0;
@@ -202,6 +206,10 @@ nav{
       }
     }
   }
+}
+
+.float-right{
+  float: right;
 }
 
 template{

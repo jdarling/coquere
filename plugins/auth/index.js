@@ -1,8 +1,10 @@
-var Basic = require('hapi-auth-basic');
+var Cookie = require('hapi-auth-cookie');
 var users = require('../../lib/store')('users');
 var Hapi = require('hapi');
 var bcrypt = require('bcrypt');
 var User = require('../../lib/orm').User;
+var Login = require('../../lib/orm').Login;
+var Boom = require('boom');
 
 var DEFAULT_USER={
   username: 'admin',
@@ -20,13 +22,25 @@ var DEFAULT_USER={
 };
 
 var validate = function(username, password, callback){
-  var self = this;
+  var self = this, hashed=false;
+  if(arguments.length===2){
+    callback=password;
+    password=username.password;
+    username=username.username;
+    hashed=true;
+  }
   users.asArray({username: username, active: true}, function(err, records){
     if(err){
       return callback(err);
     }
     var user = (records[records.root]||[]).shift();
     if(!user){
+      return callback(null, false);
+    }
+    if(hashed){
+      if(password===user.password){
+        return callback(null, true, user);
+      }
       return callback(null, false);
     }
     bcrypt.compare(password, user.password, function(err, valid){
@@ -137,7 +151,7 @@ var updateSelf = function(req, reply){
 };
 
 var getSelf = function(req, reply){
-  return reply(req.auth.credentials);
+  return reply(req.auth.credentials||false);
 };
 
 var deleteUser = function(req, reply){
@@ -162,82 +176,147 @@ var deleteUser = function(req, reply){
   });
 };
 
+var login = function(req, reply){
+  Login.validate(req.payload, function(err, creds){
+    if(err){
+      return reply(err);
+    }
+
+    validate(creds.username, creds.password, function(err, isValid, user){
+      if(err){
+        return reply(err);
+      }
+      if(isValid){
+        req.auth.session.set(user);
+        return reply({
+          root: 'user',
+          user: user
+        });
+      }
+      return reply(Boom.unauthorized('Invalid username or password.'));
+    });
+  });
+};
+
 var logout = function(req, reply){
-  return reply.redirect('/');
+  req.auth.session.clear();
+  return reply(true);
+};
+
+var uuid = function(){
+  var rand = function(count){
+    var out = '', i=0;
+    for (; i<count; i++) {
+      out += (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    }
+    return out;
+  }
+  return rand(2)+'-'+rand(1)+'-'+rand(1)+'-'+rand(1)+'-'+rand(3);
 };
 
 module.exports = function(options, next){
   var server = options.hapi;
   var config = options.config;
-  server.pack.register(Basic, function (err){
-    server.auth.strategy('simple', 'basic', {validateFunc: validate});
+  server.pack.register(Cookie, function (err){
+    server.auth.strategy('auth', 'cookie', {
+      password: process.env.AUTH_COOKIE_PASSWORD||config.password||uuid(),
+      cookie: 'coquere',
+      redirectTo: false,
+      validateFunc: validate,
+      isSecure: config.isSecure||false,
+      clearInvalid: true
+    });
+
+    server.route([
+      {
+        method: 'POST',
+        path: config.route + 'user/{id}',
+        handler: updateUser.bind(users),
+        config: {
+          auth: 'auth'
+        }
+      },
+      {
+        method: 'POST',
+        path: config.route + 'login',
+        config: {
+          handler: login,
+          auth: {
+            mode: 'try',
+            strategy: 'auth'
+          },
+          plugins: {
+            'hapi-auth-cookie': {
+              redirectTo: false,
+              clearInvalid: true
+            }
+          }
+        }
+      },
+      {
+        method: 'POST',
+        path: config.route + 'logout',
+        handler: logout
+      },
+      {
+        method: 'GET',
+        path: config.route + 'user/me',
+        config: {
+          handler: getSelf.bind(users),
+          auth: {
+            mode: 'try',
+            strategy: 'auth'
+          },
+          plugins: {
+            'hapi-auth-cookie': {
+              redirectTo: false,
+              clearInvalid: true
+            }
+          }
+        }
+      },
+      {
+        method: 'POST',
+        path: config.route + 'user/me',
+        handler: updateSelf.bind(users),
+        config: {
+          auth: 'auth'
+        }
+      },
+      {
+        method: 'POST',
+        path: config.route + 'user',
+        handler: createUser.bind(users),
+        config: {
+          auth: 'auth'
+        }
+      },
+      {
+        method: 'DELETE',
+        path: config.route + 'user/{id}',
+        handler: deleteUser.bind(users),
+        config: {
+          auth: 'auth'
+        }
+      },
+      {
+        method: 'GET',
+        path: config.route + 'users',
+        handler: listUsers.bind(users),
+        config: {
+          auth: 'auth'
+        }
+      },
+      {
+        method: 'GET',
+        path: config.route + 'user/{id}',
+        handler: getUser.bind(users),
+        config: {
+          auth: 'auth'
+        }
+      },
+    ]);
   });
-  server.route([
-    {
-      method: 'POST',
-      path: config.route + 'user/{id}',
-      handler: updateUser.bind(users),
-      config: {
-        auth: 'simple'
-      }
-    },
-    {
-      method: 'POST',
-      path: config.route + 'logout',
-      handler: logout.bind(users),
-      config: {
-        auth: 'simple'
-      }
-    },
-    {
-      method: 'GET',
-      path: config.route + 'user/me',
-      handler: getSelf.bind(users),
-      config: {
-        auth: 'simple'
-      }
-    },
-    {
-      method: 'POST',
-      path: config.route + 'user/me',
-      handler: updateSelf.bind(users),
-      config: {
-        auth: 'simple'
-      }
-    },
-    {
-      method: 'POST',
-      path: config.route + 'user',
-      handler: createUser.bind(users),
-      config: {
-        auth: 'simple'
-      }
-    },
-    {
-      method: 'DELETE',
-      path: config.route + 'user/{id}',
-      handler: deleteUser.bind(users),
-      config: {
-        auth: 'simple'
-      }
-    },
-    {
-      method: 'GET',
-      path: config.route + 'users',
-      handler: listUsers.bind(users),
-      config: {
-        auth: 'simple'
-      }
-    },
-    {
-      method: 'GET',
-      path: config.route + 'user/{id}',
-      handler: getUser.bind(users),
-      config: {
-        auth: 'simple'
-      }
-    },
-  ]);
   users.asArray({}, function(err, records){
     if(err){
       server.error(err);

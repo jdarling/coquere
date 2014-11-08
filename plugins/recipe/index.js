@@ -107,7 +107,7 @@ module.exports = function(options, next){
       path: config.route + 'recipe',
       handler: postRecord.bind(store),
       config: {
-        auth: 'simple'
+        auth: 'auth'
       }
     },
     {
@@ -115,7 +115,7 @@ module.exports = function(options, next){
       path: config.route + 'recipe',
       handler: postRecord.bind(store),
       config: {
-        auth: 'simple'
+        auth: 'auth'
       }
     },
     {
@@ -123,7 +123,7 @@ module.exports = function(options, next){
       path: config.route + 'recipe/{id}',
       handler: putRecord.bind(store),
       config: {
-        auth: 'simple'
+        auth: 'auth'
       }
     },
     {
@@ -131,7 +131,7 @@ module.exports = function(options, next){
       path: config.route + 'recipe/{id}',
       handler: putRecord.bind(store),
       config: {
-        auth: 'simple'
+        auth: 'auth'
       }
     },
     {
@@ -139,7 +139,7 @@ module.exports = function(options, next){
       path: config.route + 'recipe/{id}',
       handler: deleteRecord.bind(store),
       config: {
-        auth: 'simple'
+        auth: 'auth'
       }
     },
     {
@@ -147,7 +147,7 @@ module.exports = function(options, next){
       path: config.route + 'recipes',
       handler: postRecords.bind(store),
       config: {
-        auth: 'simple'
+        auth: 'auth'
       }
     }
   ]);
