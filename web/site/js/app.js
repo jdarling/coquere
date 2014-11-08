@@ -24539,19 +24539,22 @@ var RecipeEditor = Views.RecipeEditor = React.createClass({displayName: 'RecipeE
     }, 10);
   },
   recipeUpdate: function(e){
+    e.preventDefault();
     var recipe = parseRecipe(val(e.target));
     this.resizeEditor();
     this.setState({
       recipe: recipe
     });
   },
-  refreshPreview: function(){
+  refreshPreview: function(e){
+    e.preventDefault();
     var recipe = parseRecipe(val(this.refs.recipeSource.getDOMNode()));
     this.setState({
       recipe: recipe
     });
   },
-  saveRecipe: function(){
+  saveRecipe: function(e){
+    e.preventDefault();
     var self = this;
     var recipe = this.state.recipe;
     var hasId = this.state.id||isNumeric(this.state.id);
